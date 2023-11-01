@@ -8,31 +8,9 @@ from pybricks.robotics import DriveBase
 from pybricks.media.ev3dev import SoundFile, ImageFile
 from pybricks.nxtdevices import LightSensor
 
-#from main import Generic_Myblocks
+from pid import PIDController
 
-# This program requires LEGO EV3 MicroPython v2.0 or higher.
-# Click "Open user guide" on the EV3 extension tab for more information.
-
-
-# Create your objects here.
-ev3 = EV3Brick()
-leftMotor = Motor(Port.B, Direction.CLOCKWISE, gears=None)
-rightMotor = Motor(Port.C, Direction.CLOCKWISE, gears=None)
-driver = DriveBase(leftMotor, rightMotor, 87, 119)
-inf = InfraredSensor(Port.S2)
-
-# Write your program here.
-class PIDController:
-  def __init__(self):
-    self.integral = 0
-    self.last_error = 0
-
-  def adjust(error, gainP, gainI, gainD):
-    self.integral = error + self.integral
-    derivative = error - self.last_error
-    return (error * gainP) + (self.integral * gainI) + (derivative * gainD)
-
-class Generic_Myblocks:
+class GenericRobot:
   def __init__(self, EV3Brick, DriveBase, LeftMotor, RightMotor, LightSensorLeft, LightSensorRight, GyroSensor):
     self.ev3 = EV3Brick
     self.robot = DriveBase
@@ -42,7 +20,6 @@ class Generic_Myblocks:
     self.sen2 = LightSensorRight
     self.gyro = GyroSensor
     self.stopWatch = StopWatch()
-
 
   def drive_mm(self, angle, speed, mm, rate=500, brake=True):
     self.robot.reset()
@@ -127,9 +104,3 @@ class Generic_Myblocks:
     robot.stop()
     lm.hold()
     rm.hold()
-
-
-leftColor = LightSensor(Port.S1)
-rightColor = LightSensor(Port.S3)
-myblocks = Generic_Myblocks(ev3, driver, leftMotor, rightMotor, leftColor, rightColor, inf)
-myblocks.drive_mm(0, 1000, 100)

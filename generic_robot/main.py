@@ -6,27 +6,22 @@ from pybricks.parameters import Port, Stop, Direction, Button, Color
 from pybricks.tools import wait, StopWatch, DataLog
 from pybricks.robotics import DriveBase
 from pybricks.media.ev3dev import SoundFile, ImageFile
-
+from pybricks.nxtdevices import LightSensor
 
 # This program requires LEGO EV3 MicroPython v2.0 or higher.
 # Click "Open user guide" on the EV3 extension tab for more information.
 
+from generic_robot import GenericRobot
 
 # Create your objects here.
 ev3 = EV3Brick()
-leftMotor = Motor(B, positive_direction=Direction.CLOCKWISE, gears=None)
-rightMotor = Motor(C, positive_direction=Direction.CLOCKWISE, gears=None)
-driveBase = DriveBase(leftMotor, rightMotor, 87, 119)
+leftMotor = Motor(Port.B, Direction.CLOCKWISE)
+rightMotor = Motor(Port.C, Direction.CLOCKWISE)
+driver = DriveBase(leftMotor, rightMotor, 87, 119)
+inf = InfraredSensor(Port.S2)
 
-# Write your program here.
-def drive_mm(angle, speed, mm, brake=True):
-  driveBase.reset()
-  while driveBase.distance() < mm:
-    driveBase.drive(speed, angle)
-  driveBase.stop()
-  if brake == True:
-    leftMotor.hold()
-    rightMotor.hold()
-  elif brake == False:
-    leftMotor.brake()
-    rightMotor.brake()
+leftColor = LightSensor(Port.S1)
+rightColor = LightSensor(Port.S3)
+
+myblocks = GenericRobot(ev3, driver, leftMotor, rightMotor, leftColor, rightColor, inf)
+myblocks.drive_mm(0, 1000, 100)
